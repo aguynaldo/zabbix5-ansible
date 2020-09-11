@@ -1,0 +1,7 @@
+---
+- name: Recarrega o firewalld
+  systemd: 
+    name: firewalld
+    state: reloaded
+    enabled: yes
+...

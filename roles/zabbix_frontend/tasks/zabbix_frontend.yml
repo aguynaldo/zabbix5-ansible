@@ -1,0 +1,54 @@
+---
+- name: Instala pacotes Zabbix
+  dnf:
+    name:
+      - zabbix-web-mysql
+      - zabbix-apache-conf
+      - httpd
+    state: latest
+  when: ansible_distribution == "CentOS"
+
+- name: Configura o timezone no /etc/php-fpm.d/zabbix.conf
+  lineinfile: 
+    path: /etc/php-fpm.d/zabbix.conf
+    regexp: '; php_value[date.timezone] =*'
+    line: 'php_value[date.timezone] = {{ time_zone }}'
+    backup: yes
+  notify: 
+    - Reinicia o httpd
+
+- name: Copy zabbix.conf.php template 
+  template:
+    src: zabbix.conf.php.j2
+    dest: /etc/zabbix/web/zabbix.conf.php
+    mode: '0644'
+    backup: yes
+  notify:
+    - Reinicia o httpd
+
+- name: Iniciaza e habilita o autostart do serviço httpd
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: Iniciaza e habilita o autostart do serviço php-fpm
+  systemd:
+    name: php-fpm
+    state: started
+    enabled: yes
+
+- name: Iniciaza e habilita o autostart do serviço firewalld
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Adicionar porta 80 no firewall
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    state: enabled
+  notify: 
+    - Recarrega o firewalld
+...

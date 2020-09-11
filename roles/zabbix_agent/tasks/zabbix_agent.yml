@@ -1,0 +1,39 @@
+---
+- name: Adiciona o repositorio Zabbix - CentOS8
+  dnf: 
+    name: "{{ zabbix_rhel_repo }}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "CentOS"
+
+- name: Instala os pacotes do zabbix agent
+  dnf: 
+    name: 
+      - zabbix-agent 
+      - zabbix-get
+      - zabbix-sender
+  when: ansible_distribution == "CentOS"
+
+- name: Copia o template do arquivo de configuração para pasta do zabbix agent
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: zabbix
+    group: zabbix
+    mode: 0644
+    backup: yes
+
+- name: Inicializa e habilita o autostart do serviço do Zabbix Agentd
+  systemd:
+    name: zabbix-agent
+    state: started
+    enabled: yes
+
+- name: Adiciona porta do zabbix server no firewall
+  firewalld:
+    port: 10050/tcp
+    permanent: yes
+    state: enabled
+  notify: 
+    - Recarrega o firewalld
+...

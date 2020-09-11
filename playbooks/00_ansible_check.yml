@@ -1,0 +1,9 @@
+---
+- name: Verifica se ansible está conseguindo acesso aos servidores.
+  hosts: all
+  tasks: 
+  - name: Um simples check
+    user:
+      name: '{{ ansible_user }}'
+      state: present
+...

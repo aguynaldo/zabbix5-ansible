@@ -1,0 +1,7 @@
+---
+- name: Configurações e atualizações base do S.0.
+  hosts: inv_zabbix
+  become: yes
+  roles:
+    - base_so 
+...

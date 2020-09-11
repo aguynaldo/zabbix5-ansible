@@ -1,0 +1,7 @@
+---
+- name: Instala e configura o MYSQL. Adiciona e usuários para zabbix.
+  hosts: mysql
+  become: yes
+  roles:
+    - mysql 
+...

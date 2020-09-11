@@ -1,0 +1,6 @@
+---
+- name: Configura o zabbix agent nos servidores
+  include_tasks: "{{ item }}"
+  loop:
+    - zabbix_agent.yml
+...

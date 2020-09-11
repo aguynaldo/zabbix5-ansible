@@ -1,0 +1,7 @@
+---
+- name: Instala e configura o Zabbix Agent em máquinas Linux
+  hosts: inv_zabbix
+  become: yes
+  roles:
+    - zabbix_agent
+...

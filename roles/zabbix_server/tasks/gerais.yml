@@ -1,0 +1,5 @@
+---
+- name: Seta o hostname do servidor Zabbix-Server
+  hostname:
+    name: "{{ zabbix_hostname }}"
+...

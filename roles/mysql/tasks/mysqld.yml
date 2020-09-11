@@ -1,0 +1,71 @@
+---
+- name: Instala o MYSQL Server
+  dnf:
+    name:
+      - mysql-server
+      - mysql
+      - python3-PyMySQL
+    state: latest
+  when: ansible_distribution == "CentOS"
+
+- name: Inicia e habilita o serviço do Mysqld
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: Configurando senha de root do MYSQL
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host: localhost
+  notify: 
+    - Reinicia mysqld
+
+- name: Copiando template .my.cnf
+  template: 
+    src: my_cnf.j2 
+    dest: /root/.my.cnf 
+    owner: root 
+    group: root 
+    mode: 0600
+
+- name: Remove os usuários anônimos
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+- name: Remove as bases de testes
+  mysql_db:
+    name: ''
+    state: absent
+
+- name: Criar o banco de dados para o Zabbix
+  mysql_db:
+    name: '{{ zabbix_database }}'
+    encoding: utf8
+    collation: utf8_bin
+    state: present
+
+- name: Cria o usuario do zabbix-server e concede privilégios no BD
+  mysql_user:
+    name: '{{ zabbix_db_server_user }}'
+    password: '{{ zabbix_db_server_pass }}'
+    priv: '{{ zabbix_database }}.*:ALL'
+    host: '{{ zabbix_srv_ip }}'
+
+- name: Criar o usuaário do zabbix-frontend e concede permissão do BD
+  mysql_user:
+    name: '{{ zabbix_db_front_user }}'
+    password: '{{ zabbix_db_front_pass }}'
+    priv: '{{ zabbix_database }}.*:ALL'
+    host: '{{ frontend_ip }}'
+
+- name: Adiciana regra para liberar as portas do Mysql no firewall
+  firewalld:
+    port: 3306/tcp
+    permanent: yes
+    state: enabled
+  notify: Recarrega o firewalld
+...

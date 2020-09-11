@@ -1,0 +1,31 @@
+---
+- name: Para o serviço do Mysql Server
+  systemd:
+    name: mysqld
+    state: stopped
+  register: result
+
+- name: Debug - Verifica se conseguiu parar o serviço do mysql.
+  debug:
+    msg: "{{ result }}"
+
+- name: Realiza um tuning básico no Mysql Server. Adiciona o arquivo mysql-server.cnf
+  blockinfile:
+    path: /etc/my.cnf.d/mysql-server.cnf
+    backup: yes
+    block: |
+      innodb_file_per_table = 1
+      innodb_buffer_pool_size = {{ (ansible_memtotal_mb * 0.75)|int }}M
+      innodb_buffer_pool_instances = {{ 1 if ansible_memtotal_mb * 0.75 < 1025 else 8 if ansible_memtotal_mb * 0.75 < 16385 else ansible_memtotal_mb * 0.75 / 2  }}  
+      innodb_flush_method = O_DIRECT
+      innodb_log_file_size = 256M
+      max_connections = 300
+      innodb_flush_log_at_trx_commit = 2
+  when: result.changed
+
+- name: Inicia o serviço do Mysql Server
+  systemd:
+    name: mysqld
+    state: started
+  when: result.changed
+...

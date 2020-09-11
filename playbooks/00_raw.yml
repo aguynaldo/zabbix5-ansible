@@ -1,0 +1,15 @@
+---
+- name: Instala o python caso o host não possua.
+  hosts: remotos
+  gather_facts: yes
+
+  pre_tasks:
+    - name: 'Limpa cache antigo dos repos (Familia RedHat)'
+      raw: "dnf clean all"
+
+    - name: 'Atualiza os repo no Centos'
+      raw: "dnf check-update"
+
+    - name: 'Instala o Python (Familia RedHat)'
+      raw: "dnf install python -y"
+...

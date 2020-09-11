@@ -1,0 +1,72 @@
+---
+# ----------- GERAIS ----------- #
+- name: Desabilita o SELinux em execução (Temp)
+  shell: setenforce 0
+  when: ansible_selinux.status == "enabled" and ansible_distribution == "CentOS"
+
+- name: Desabilita o SELinux permanentemente
+  replace:
+    dest=/etc/selinux/config
+    regexp='SELINUX=enforcing'
+    replace='SELINUX=disabled'
+  when: ansible_selinux.status == "enabled" and ansible_distribution == "CentOS"
+
+- name: Customiza o /etc/profile
+  lineinfile: dest=/etc/profile line={{ item }}
+  with_items:
+    - '#--- Default export & Alias ---#'
+    - 'export HISTTIMEFORMAT="%d/%m/%Y - %H:%M:%S - "'
+    - 'export HISTSIZE="5000"'
+    - 'export HISTFILESIZE="5000"'
+    - 'alias ls="ls -lh --color"'
+    - 'alias grep="grep --color"'
+    - 'alias vi="vim"'
+    - 'alias rm="rm -i"'
+    #- '/etc/motd.sh'
+
+- name: Adicionando o arquivo motd
+  template:
+    src: motd
+    dest: /etc/motd
+    force: yes
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - Reinicia o SSH
+
+# ----------- Timezone ----------- #
+- name: Configura o timezone
+  timezone:
+    name: "{{ time_zone }}"
+
+# ----------- Adiciona repo do zabbix no centos-8 ----------- #
+- name: Adiciona o repositorio do Zabbix - CentOS-8
+  dnf: 
+    name: "{{ zabbix_rhel_repo }}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "CentOS"
+
+# ----------- Pacotes ----------- #
+- name: Atualiza os sistemas RedHat based
+  dnf: 
+    name: "*"
+    state: latest 
+    update_cache: yes
+  when: ansible_distribution =="CentOS"
+
+- name: Instala programas/utilitários de propósito geral
+  dnf:
+    name: "{{ common_packages_redhat_like }}"
+    state: latest
+  when: ansible_distribution == "CentOS"
+    
+# ----------- Firewall ----------- #
+- name: Habilita inicialização automática do firewalld 
+  systemd: 
+    name: firewalld 
+    state: reloaded 
+    daemon_reload: yes 
+    enabled: yes
+...

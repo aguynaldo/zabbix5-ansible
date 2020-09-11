@@ -1,0 +1,12 @@
+---
+- name: Reinicia o httpd
+  systemd:
+    name: httpd
+    state: restarted
+    daemon_reload: yes
+
+- name: Recarrega o firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+...

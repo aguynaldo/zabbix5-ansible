@@ -1,0 +1,12 @@
+----------------------------------------------------------
+ATENÇÃO: Grandes poderes trazem grandes responsabilidades.
+
+Todos os seus comandos estão sendo gravados.
+
+Host: {{ ansible_hostname }}
+
+IP: {{ ansible_default_ipv4 }}
+
+Linux: {{ ansible_distribution }}
+----------------------------------------------------------
+

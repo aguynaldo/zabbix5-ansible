@@ -1,0 +1,7 @@
+---
+- name: Instala e configura o Zabbix Server.
+  hosts: zabbix-server
+  become: yes
+  roles:
+    - zabbix_server 
+...

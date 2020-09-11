@@ -1,0 +1,74 @@
+---
+- name: Instala o Zabbix-Server e o Cliente MYSQL
+  dnf: 
+    name: 
+      - zabbix-server
+      - mysql
+    state: latest
+  when: ansible_distribution =="CentOS"
+
+- name: Instala o PyMySQL. Requisito para fazer o import do sql.
+  pip:
+    name: PyMySQL
+    state: present
+
+- name: Descompacta arquivo de carga inicial do BD
+  shell:
+    cmd: "zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz > /tmp/initial.sql"
+  args:
+    executable: /bin/bash
+    creates: /tmp/initial.sql
+  register: result_schema
+
+- name: Verifica se a task anterior conseguiu descompactar o arquivo sql inicial.
+  debug:
+    msg: "{{ result_schema }}"
+
+- name: Importa o arquivo de carga inicial para o banco de dados do zabbix.
+  mysql_db:
+    state: import
+    name: "{{ zabbix_database  }}"
+    target: /tmp/initial.sql
+    login_user: "{{ zabbix_db_server_user }}"
+    login_password: "{{ zabbix_db_server_pass }}"
+    login_host: "{{ mysql_ip }}"
+  when: result_schema.changed
+
+- name: Faz backup do arquivo de configuração original do Zabbix Server. 
+  copy:
+    src: /etc/zabbix/zabbix_server.conf
+    dest: /etc/zabbix/zabbix_server_original.conf
+    remote_src: yes
+    owner: root 
+    group: zabbix 
+    mode: 0640
+
+- name: Copia o arquivo de configuração do zabbix-server
+  template:
+    src: zabbix_server_conf.j2
+    dest: /etc/zabbix/zabbix_server.conf
+    owner: root 
+    group: zabbix 
+    mode: 0640
+  notify: Inicia o zabbix-server
+
+- name: Inicia o firewall e habilita sua inicialização automática
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Adiciona portas do zabbix agent no firewall
+  firewalld:
+    port: 10050/tcp
+    permanent: yes
+    state: enabled
+  notify: Recarrega o firewalld
+
+- name: Adiciona portas do zabbix server no firewall
+  firewalld:
+    port: 10051/tcp
+    permanent: yes
+    state: enabled
+  notify: Recarrega o firewalld
+...

@@ -1,0 +1,8 @@
+---
+- name: Configura o Servidor MYSQL
+  include_tasks: "{{ item }}"
+  loop:
+    - gerais.yml
+    - mysqld.yml
+    - tuning.yml
+...
