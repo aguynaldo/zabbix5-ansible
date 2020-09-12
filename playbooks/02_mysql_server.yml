@@ -3,5 +3,5 @@
   hosts: mysql-server
   become: yes
   roles:
-    - mysql 
+    - mysql_server
 ...

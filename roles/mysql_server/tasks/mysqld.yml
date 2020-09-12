@@ -55,7 +55,7 @@
     priv: '{{ ZABBIX_DB }}.*:ALL'
     host: '{{ ZBX_SERVER_IP }}'
 
-- name: Criar o usuaário do zabbix-frontend e concede permissão do BD
+- name: Criar o usuaário do zabbix-web e concede permissão do BD
   mysql_user:
     name: '{{ ZABBIX_DB_WEB_USER }}'
     password: '{{ ZABBIX_DB_WEB_PASS }}'

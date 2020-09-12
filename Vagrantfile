@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
       vb.cpus = ENV['CPU']
       vb.customize ["modifyvm", :id, "--groups", ENV['VBOX_GROUP_NAME']]
     end
-    centos.vm.provision "shell", path:"role_redhat_like.sh"
+    centos.vm.provision "shell", path:"redhat_like.sh"
   end
 
   # ZABBIX-SERVER
@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
       vb.cpus = ENV['CPU']
       vb.customize ["modifyvm", :id, "--groups", ENV['VBOX_GROUP_NAME']]
     end
-    centos.vm.provision "shell", path:"role_redhat_like.sh"
+    centos.vm.provision "shell", path:"redhat_like.sh"
   end
 
   # ZABBIX-FRONTEND
@@ -50,6 +50,6 @@ Vagrant.configure("2") do |config|
       vb.cpus = ENV['CPU']
       vb.customize ["modifyvm", :id, "--groups", ENV['VBOX_GROUP_NAME']]
     end
-    centos.vm.provision "shell", path:"role_redhat_like.sh"
+    centos.vm.provision "shell", path:"redhat_like.sh"
   end
 end
