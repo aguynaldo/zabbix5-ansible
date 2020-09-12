@@ -27,11 +27,11 @@
 - name: Importa o arquivo de carga inicial para o banco de dados do zabbix.
   mysql_db:
     state: import
-    name: "{{ zabbix_database  }}"
+    name: "{{ ZABBIX_DB  }}"
     target: /tmp/initial.sql
-    login_user: "{{ zabbix_db_server_user }}"
-    login_password: "{{ zabbix_db_server_pass }}"
-    login_host: "{{ mysql_ip }}"
+    login_user: "{{ ZABBIX_DB_SERVER_USER }}"
+    login_password: "{{ ZABBIX_DB_SERVER_PASS }}"
+    login_host: "{{ BD_SERVER_IP }}"
   when: result_schema.changed
 
 - name: Faz backup do arquivo de configuração original do Zabbix Server. 

@@ -1,7 +1,7 @@
 ---
 - name: Instala e configura o zabbix frontend.
-  hosts: zabbix-frontend
+  hosts: zabbix-web
   become: yes
   roles:
-    - zabbix_frontend
+    - zabbix_web
 ...

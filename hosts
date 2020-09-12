@@ -13,9 +13,9 @@
 127.0.0.1 ansible_connection=local
 
 [inv_zabbix]
-mysql ansible_host=192.168.0.201
+mysql-server ansible_host=192.168.0.201
 zabbix-server ansible_host=192.168.0.202
-zabbix-frontend ansible_host=192.168.0.203
+zabbix-web ansible_host=192.168.0.203
 
 
 [todos:children]

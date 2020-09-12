@@ -1,5 +1,5 @@
 ---
-- name: Instala pacotes Zabbix
+- name: Instala pacotes Zabbix Web
   dnf:
     name:
       - zabbix-web-mysql

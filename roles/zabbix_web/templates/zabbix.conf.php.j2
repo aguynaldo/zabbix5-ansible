@@ -2,11 +2,11 @@
 // Zabbix GUI configuration file.
 
 $DB['TYPE']				= 'MYSQL';
-$DB['SERVER']			= '{{ mysql_ip }}';
+$DB['SERVER']			= '{{ BD_SERVER_IP }}';
 $DB['PORT']				= '0';
-$DB['DATABASE']			= '{{ zabbix_database }}';
-$DB['USER']				= '{{ zabbix_db_front_user }}';
-$DB['PASSWORD']			= '{{ zabbix_db_front_pass }}';
+$DB['DATABASE']			= '{{ ZABBIX_DB }}';
+$DB['USER']				= '{{ ZABBIX_DB_WEB_USER }}';
+$DB['PASSWORD']			= '{{ ZABBIX_DB_WEB_PASS }}';
 
 // Schema name. Used for PostgreSQL.
 $DB['SCHEMA']			= '';
@@ -24,9 +24,9 @@ $DB['CIPHER_LIST']		= '';
 // For upgraded installations, please read database upgrade notes before enabling this option.
 $DB['DOUBLE_IEEE754']	= true;
 
-$ZBX_SERVER				= '{{ zabbix_srv_ip }}';
+$ZBX_SERVER				= '{{ ZBX_SERVER_IP }}';
 $ZBX_SERVER_PORT		= '10051';
-$ZBX_SERVER_NAME		= '{{ zabbix_installation_name }}';
+$ZBX_SERVER_NAME		= '{{ NOME_INSTALACAO_ZABBIX }}';
 
 $IMAGE_FORMAT_DEFAULT	= IMAGE_FORMAT_PNG;
 

@@ -20,28 +20,28 @@ zabbix_rhel_repo: 'http://repo.zabbix.com/zabbix/5.0/rhel/8/x86_64/zabbix-releas
 
 
 # IPs 
-mysql_ip: "192.168.0.201"
-zabbix_srv_ip: "192.168.0.202"
-frontend_ip: "192.168.0.203"
+BD_SERVER_IP: "192.168.0.201"
+ZBX_SERVER_IP: "192.168.0.202"
+ZBX_WEB_IP: "192.168.0.203"
 
-# Hostname
-mysql_hostname: "mysql-rhel"
-zabbix_hostname: "zabbix-rhel"
-frontend_hostname: "frontend-rhel"
+# Hostname dos servidores
+BD_SERVER_HOSTNAME: "mysql-server"
+ZBX_SERVER_HOSTNAME: "zabbix-server"
+ZBX_WEB_HOSTNAME: "frontend-web"
 
 
 #---Credencias de acesso ao MYSQL
-mysql_root_password: "Senha#Root1!"
+MYSQL_ROOT_PASSWORD: "Senha#Root1!"
 
-zabbix_db_server_user: usr_zbx_srv
-zabbix_db_server_pass: "Senha#Zabb1x!"
+ZABBIX_DB_SERVER_USER: usr_zbx_srv
+ZABBIX_DB_SERVER_PASS: "Senha#Zabb1x!"
 
-zabbix_db_front_user: usr_zbx_web
-zabbix_db_front_pass: "Senha#Front3nd!"
+ZABBIX_DB_WEB_USER: usr_zbx_web
+ZABBIX_DB_WEB_PASS: "Senha#Front3nd!"
 
 # DATABASE
-zabbix_database: dbzabbix
+ZABBIX_DB: dbzabbix
 
 # Nome que aparece no title do browser ao acessar o zabbix.
-zabbix_installation_name: "Zabbix Server via Ansible"
+NOME_INSTALACAO_ZABBIX: "Zabbix 5 via Ansible"
 ...
