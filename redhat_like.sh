@@ -7,9 +7,7 @@ systemctl restart sshd.service
 
 
 # Instalando o Python 
-echo "[TASK 1] Instalando o Python 3.8 e o epel-release"
-dnf makecache
-dnf install epel-release -y 
+echo "[TASK 2] Instalando o Python 3"
 dnf makecache
 dnf install python3 -y
 

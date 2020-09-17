@@ -1,0 +1,7 @@
+---
+- import_playbook: 01_base_so.yml
+- import_playbook: 02_mysql_server.yml
+- import_playbook: 03_zabbix_server.yml
+- import_playbook: 04_zabbix_web.yml
+- import_playbook: 05_zabbix_agent.yml
+...

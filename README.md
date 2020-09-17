@@ -84,7 +84,11 @@ Siga as instruções abaixo para instalar e configurar o Zabbix5 em servidores C
 
 8. Se desejar pode executar dos os playbooks em um único comando.
 
-    ```bash  
+    ```bash
+    ansible-playbook playbooks/00_deploy_all_servers.yml
+
+    ou
+
     ansible-playbook playbooks/01_base_so.yml playbooks/02_mysql_server.yml playbooks/03_zabbix_server.yml playbooks/04_zabbix_web.yml playbooks/05_zabbix_agent.yml
 
 **ATENÇÃO**: Caso já possua os servidores hospedados em alguma núvem ou em outro virtualizador, execute somente os passos 6 e (7 ou 8). Atenção ao editar os arquivos mencionados no passo 6. Neste cenário pode-se apagar os seguintes arquivos: Vagrantfile, redhat_like.sh, env_renomear e o .env.
