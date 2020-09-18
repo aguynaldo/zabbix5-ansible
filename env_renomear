@@ -1,17 +1,10 @@
+## O Vagrant irá configurar uma interface no modo bridge. Informar qual interface
+# deverá ser utilizada. 
 INTERFACE_BRIDGE_HOST_FISICO=wlp60s0
 
 ########## AMBIENTE BASEADO EM CENTOS ##########
 SO_BOX=centos/8
 VBOX_GROUP_NAME="/ANSIBLE-ZBX-REDHAT-LIKE"
-INSTALA_PYTHON_BASE="redhat_like.sh"
-
-########## AMBIENTE BASEADO EM DEBIAN ##########
-# SO_BOX=generic/debian10
-# VBOX_GROUP_NAME="/ANSIBLE-ZBX-DEBIAN-LIKE"
-# INSTALA_PYTHON_BASE="debian_like.sh"
-
-# ANSIBLE_HOSTNAME=ansible
-# ANSIBLE_IP=192.168.0.200
 
 BD_HOSTNAME=mysql-server
 BD_IP=192.168.0.201

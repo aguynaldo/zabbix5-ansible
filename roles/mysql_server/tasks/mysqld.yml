@@ -1,4 +1,11 @@
 ---
+- name: Adiciona o repositorio do MYSql-8 - CentOS-8
+  dnf: 
+    name: "{{ mysql_rhel_repo }}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == "CentOS"
+
 - name: Instala o MYSQL Server
   dnf:
     name:
