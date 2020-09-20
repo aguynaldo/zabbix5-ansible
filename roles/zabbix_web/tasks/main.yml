@@ -4,4 +4,5 @@
   loop:
     - gerais.yml
     - zabbix_web.yml
+    - cadastra_servers_zabbix_api.yml
 ...

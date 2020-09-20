@@ -1,0 +1,19 @@
+---
+- name: Instala o módulo zabbix-api via pip.
+  pip:
+    name: zabbix-api
+    state: present
+
+- name: Copia template script python que cadastra os 3 servers via api do zabbix
+  template:
+    src: add_zabbix_servers.py.j2
+    dest: /tmp/add_zabbix_servers.py
+    owner: root 
+    group: root 
+    mode: 0660
+  register: result
+  
+- name: Executa o script para adicionar os 3 servers ao monitoramento.
+  shell: "python3 /tmp/add_zabbix_servers.py"
+  when: result.changed
+...

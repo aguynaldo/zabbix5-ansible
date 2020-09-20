@@ -1,0 +1,99 @@
+from zabbix_api import ZabbixAPI
+
+URL = 'http://{{ ZBX_WEB_IP }}/zabbix'
+USERNAME = 'Admin'
+PASSWORD = 'zabbix'
+
+# Grupos utilizados
+groupids = ["4", "2"]
+groups = [{"groupid": groupid} for groupid in groupids]
+
+try:
+    zapi = ZabbixAPI(URL, timeout=30)
+    zapi.login(USERNAME, PASSWORD)
+
+    print(f'Conectado na API do Zabbix, versao atual {zapi.api_version()}\n\n')
+
+    # Adicionando o mysql-server
+    zapi.host.create(
+        {
+            "host": "{{ BD_SERVER_HOSTNAME }}",
+            "groups": groups, 
+            "interfaces": [
+                {
+                    "type": 1,
+                    "main": 1, 
+                    "useip": 1, 
+                    "ip": "{{ BD_SERVER_IP }}",
+                    "dns": "", 
+                    "port": "10050"
+                }
+            ],
+            "templates": [
+                { "templateid": "10001" }, # linux by agent 
+                { "templateid": "10316"}  # mysql by agent
+
+            ]
+        }
+    )
+    print(f"Host {{ BD_SERVER_HOSTNAME }} adicionado com sucesso!")
+
+    # Adicionando o zabbix-web
+    zapi.host.create(
+        {
+            "host": "{{ ZBX_WEB_HOSTNAME }}",
+            "groups": groups, 
+            "interfaces": [
+                {
+                    "type": 1,
+                    "main": 1, 
+                    "useip": 1, 
+                    "ip": "{{ ZBX_WEB_IP }}",
+                    "dns": "", 
+                    "port": "10050"
+                }
+            ],
+            "templates": [
+                { "templateid": "10001" }, # linux by agent 
+                { "templateid": "10264"}  # apache by agent
+            ]
+        }
+    )
+    print(f"Host {{ ZBX_WEB_HOSTNAME }} adicionado com sucesso!")
+
+
+    # Atualizando o zabbix-server
+    zbx_server = zapi.host.get(
+        {
+            "filter": {
+                "host": ["Zabbix server"]
+            }
+        }
+    )
+
+    interface = zapi.hostinterface.get(
+        {
+            "output": "extend",
+            "hostids": zbx_server[0]['hostid']
+        }
+    )
+    
+    zapi.hostinterface.update(
+        {
+            "interfaceid": interface[0]['interfaceid'],
+            "ip": "{{ ZBX_SERVER_IP }}"
+        }
+    )
+    
+    zapi.host.update(
+        {
+            "hostid": zbx_server[0]['hostid'],
+            "host": "{{ ZBX_SERVER_HOSTNAME }}",
+        }
+    )
+    
+    print(f"Host {{ ZBX_SERVER_HOSTNAME }} atualizado com sucesso!")
+
+
+except Exception as err:
+    print(f'Falha ao conectar na API do zabbir, erro: {err}')
