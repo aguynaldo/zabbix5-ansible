@@ -30,7 +30,7 @@ ZBX_WEB_IP: "192.168.0.203"
 # Hostname dos servidores
 BD_SERVER_HOSTNAME: "mysql-server"
 ZBX_SERVER_HOSTNAME: "zabbix-server"
-ZBX_WEB_HOSTNAME: "frontend-web"
+ZBX_WEB_HOSTNAME: "zabbix-web"
 
 
 #---Credencias de acesso ao MYSQL
